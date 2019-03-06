@@ -20,19 +20,76 @@
 
 ## 3.1 BIOS
 -  x86中BIOS从磁盘读入的第一个扇区是是什么内容？为什么没有直接读入操作系统内核映像？
+
+
+内容是操作系统的加载程序。
+
+
+因为BIOS最多只能读取一个扇区的内容，大小为512字节，而一个操作系统内核映像远远大于512字节。
+
+
 - 比较UEFI和BIOS的区别。
+
+
+UEFI工作流程比BIOS更复杂，安全性上也更加安全。
+
+
 - 理解rcore中的Berkeley BootLoader (BBL)的功能。
+
+
+功能分为三个阶段：硬件初始化->将引导的参数传给内核->加载内核
+
 
 ## 3.2 系统启动流程
 
 - x86中分区引导扇区的结束标志是什么？
+
+
+0x55AA
+
+
 - x86中在UEFI中的可信启动有什么作用？
+
+
+保证启动介质的安全性
+
+
 - RV中BBL的启动过程大致包括哪些内容？
+
+
+硬件初始化->将引导的参数传给内核->加载内核
+
 
 ## 3.3 中断、异常和系统调用比较
 - 什么是中断、异常和系统调用？
+
+
+中断是由外部设备引发的。
+
+
+异常是应用程序运行时出现的错误，需要进行单独处理。
+
+
+系统调用是由用户程序主动发起，为方便应用程序而进行的一些操作，如I/O操作。
+
+
 -  中断、异常和系统调用的处理流程有什么异同？
+
+
+同：均需要在遇到时查看向量表、在结束时恢复到原程序的运行状态
+
+
+异：处理方法不同、响应机制不同。
+
+
 - 以ucore/rcore lab8的answer为例，ucore的系统调用有哪些？大致的功能分类有哪些？
+
+
+共有25个系统调用，分别是sys_exit, sys_fork, sys_wait, sys_exec, sys_clone, sys_yield, sys_sleep, sys_kill, sys_gettime, sys_getpid, sys_mmap, sys_munmap, sys_shmem, sys_putc, sys_pgdir, sys_open, sys_close, sys_read, sys_write, sys_seek, sys_fstat, sys_fsync, sys_getcwd, sys_getdirentry, sys_dup。
+
+
+功能上分为四类：进程管理、文件操作、内存管理、外设输出。
+
 
 ## 3.4 linux系统调用分析
 - 通过分析[lab1_ex0](https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab1/lab1-ex0.md)了解Linux应用的系统调用编写和含义。(仅实践，不用回答)
@@ -47,7 +104,14 @@
  
 ## 3.6 请分析函数调用和系统调用的区别
 - 系统调用与函数调用的区别是什么？
+
+
+系统调用会进行进程的切换，调用的函数有自己的栈。函数调用不会进行进程的切换，使用调用者的栈。
+
+
 - 通过分析x86中函数调用规范以及`int`、`iret`、`call`和`ret`的指令准确功能和调用代码，比较x86中函数调用与系统调用的堆栈操作有什么不同？
+
+
 - 通过分析RV中函数调用规范以及`ecall`、`eret`、`jal`和`jalr`的指令准确功能和调用代码，比较x86中函数调用与系统调用的堆栈操作有什么不同？
 
 
